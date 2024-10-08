@@ -31,7 +31,16 @@ namespace PLACEMENT_2.Controllers
         public IActionResult ApiDepartment()
         {
             return View();
+
         }
+
+        public IActionResult AddDepartment()
+        {
+            return View();
+
+        }
+
+
 
 
 

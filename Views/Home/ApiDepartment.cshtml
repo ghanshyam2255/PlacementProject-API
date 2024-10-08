@@ -6,17 +6,18 @@
 <div class="container">
     <h2 class="mb-2">Customer List</h2>
     <div class="d-flex justify-content-end mb-2">
-        <a asp-action="Create" class="btn btn-outline-primary btn-sm rounded-3"> <i class="bi bi-plus-circle"></i> Add Department </a>
+        <a asp-action="AddDepartment" class="btn btn-outline-primary btn-sm rounded-3"> <i class="bi bi-plus-circle"></i> Add Department </a>
+        
+
     </div>
     <div class="table-responsive">
         <table id="example" class="display" style="width:100%">
             <thead class="thead-dark">
                 <tr>
                     <th class="text-start">Sr no</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th class="text-start">Phone Number</th>
-                    <th>Email</th>
+                    <th>Department Name</th>
+                    <th>Created Date</th>
+                    <th>Status</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -31,11 +32,34 @@
             $.ajax({
                 url: 'https://localhost:7202/api/Department/Get',
                 method: 'GET',
-                success: function (response) {
+                success: function (data) {
                     alert('Hello');
                     debugger;
                     // Handle the API response here
-                    console.log(response);
+                    console.log(data);
+                if (data && data.length > 0) {
+                    var tableBody = $('#customerTableBody');
+                    tableBody.empty();
+
+                    data.forEach(function (customer, index) {
+                        var row = '<tr>' +
+                            '<td class="text-start">' + ++index + '</td>' +
+                            '<td>' + customer.departmentName + '</td>' +
+                            '<td>' + customer.createdAt + '</td>' +
+                            '<td class="text-start">' + customer.isActive + '</td>' +
+                            '<td>' +
+                            '<button class="btn btn-primary btn-sm m-1 rounded-3" id="cust_' + customer.id + '" onclick="editCustomer(' + customer.id + ')">Edit</button>' +
+                            '<button class="btn btn-danger btn-sm rounded-3" onclick="deleteCustomer(' + customer.id + ')">Delete</button>' +
+                            '</td>' +
+                            '</tr>';
+                        tableBody.append(row);
+                    });
+
+                    new DataTable('#example');
+
+                } else {
+                    console.log('No data found');
+                }
                 },
                 error: function (xhr, status, error) {
                     // Handle errors here
